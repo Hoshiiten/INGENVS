@@ -7,17 +7,23 @@
 
 // Insert required modules 
 var express = require("express");   // to create web server
+var bodyParser = require("body-parser");
 //var fs      = require("fs");        // to read/write in file
 
 
 // Instanciate an object express
 var app = express(); 
+// Use parsing module
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 
 // Routage
 app.use('/', express.static(__dirname+"/public"));
-app.get('/network', function(req, res){
-
+app.post('/network', function(req, res){
+	var disease = req.body.choice_disease; 
+    console.log(disease);
+    response.sendFile( __dirname  + '/public');	
 
 
 
