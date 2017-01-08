@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ingenvs</title>
+	<!-- BOOTSTRAP STYLES-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FONTAWESOME STYLES-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+     <!-- MORRIS CHART STYLES-->
+    <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+        <!-- CUSTOM STYLES-->
+    <link href="assets/css/custom.css" rel="stylesheet" />
+     <!-- GOOGLE FONTS-->
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+   <script src="https://code.angularjs.org/snapshot/angular.min.js"></script>
+   <script src="assets/js/app.js"></script>
+   
+</head>
+<body>
+    <table ng-app="diseaseGraph" ng-controller="graph">
+    <td width="20%" >
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html">INGENVS</a> 
+            </div>
+  
+        </nav>   
+           <!-- /. NAV TOP  -->
+                <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+				<li class="text-center">
+                    <img src="assets/img/header3.jpg" class="user-image img-responsive"/>
+					</li>
+				
+					
+                    <li>
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </li>
+                    <br/>
+                    <li class="text-center">
+                        <form name="myForm">
+                            <label for="repeatSelect">  Disease: </label> <br/>
+                            <select name="repeatSelect" id="repeatSelect" ng-model="maladie.model">
+                                <option ng-repeat="option in maladie.availableOptions" value="{{option.name}}">{{option.name}}</option>
+                            </select>
+                        </form>
+                    </li>
+                    <li >
+
+                        <form name="myForm" class="text-center">
+                            <label for="repeatSelect" > interest gene: </label><br/>
+                            <select name="repeatSelect" id="repeatSelect" ng-model="gene.model">
+                                <option ng-repeat="option in gene.availableOptions" value="{{option.name}}">{{option.name}}</option>
+                            </select>
+
+                        </form>
+                    </li>
+                    <li>
+                        <form action="action_page.php" method="get">
+                            Profundity:
+                          <input type="range" name="points" min="0" max="10">
+                         
+                        </form>
+                    </li>
+                            
+                            
+                </ul>
+            </div>
+            
+        </nav>  
+
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+                
+                <div class="row"> 
+                    
+                      
+                               <div class="col-md-12 col-sm-12 col-xs-12">                     
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Selected network
+                        </div>
+                        <div class="panel-body">
+                            <img src="assets/img/reseau.png" width=500 height=40 class="user-image img-responsive"/>
+                        </div>
+                    </div>            
+                </div>
+                      <div class="col-md-12 col-sm-12 col-xs-12">                     
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Description: <br/>
+                            {{maladie.model}}<br/>
+                            {{gene.model}}
+                     </div>
+   
+       
+                        </div>
+                        <div class="panel-body">
+                            <div id="morris-area-chart"></div>
+
+                        </div>
+                    </div>            
+                </div> 
+                
+           </div>
+                 
+    </div>
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+        </div>
+     <!-- /. WRAPPER  -->
+    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+
+
+    
+    <!-- JQUERY SCRIPTS -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- BOOTSTRAP SCRIPTS -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+     <!-- MORRIS CHART SCRIPTS -->
+     <script src="assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="assets/js/morris/morris.js"></script>
+      <!-- CUSTOM SCRIPTS -->
+    <script src="assets/js/custom.js"></script>
+
+
+    </table>
+   
+</body>
+</html>
