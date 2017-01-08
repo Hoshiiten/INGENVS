@@ -5,34 +5,59 @@
 */
 
 
-// Insert required modules 
+/*    REQUIRED MODULES      */
 var express = require("express");   // to create web server
-var bodyParser = require("body-parser");
-//var fs      = require("fs");        // to read/write in file
+var bodyParser = require("body-parser");  // to parse html
+var fs      = require("fs");        // to read/write in file
+var db = require("seraph")({
+	user: 'neo4j',
+	pass: 'felix'
+});
 
 
+
+
+
+/*    SOME MODULE SETTINGS      */
 // Instanciate an object express
-var app = express(); 
+var server = express(); 
 // Use parsing module
-app.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.urlencoded({ extended: false }));
+// Read database
+var cypher = "MATCH (n:Disease) RETURN n";
 
+var data = { "disease" : [] };
+db.query(cypher, {id: 1}, function(err, result) {
+  if (err) throw err;
 
+  for(d = 0 ; d < result.length ; d++){
+  	var tmp = {}; tmp["id"] = d; tmp["name"] = result[d]["name"];
+  	data["disease"].push(tmp);
+  }
 
-// Routage
-app.use('/', express.static(__dirname+"/public"));
-app.post('/network', function(req, res){
-	var disease = req.body.choice_disease; 
-    console.log(disease);
-    response.sendFile( __dirname  + '/public');	
-
-
-
+  json = JSON.stringify(data);
+  fs.writeFile('diseaseData.json', json, 'utf8');
 
 });
 
 
 
+
+
+/*    ROUTAGE      */
+server.use('/', express.static(__dirname + "/public/home/"));
+server.use('/interface', express.static(__dirname + "/public/interface"));
+server.post('/graph', function(req, res, next){
+	var disease = req.body.choice_disease; 
+
+  res.render("test", {test:req.test});  
+
+  res.redirect("/interface")
+});
+
+
+
 // Create server
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log('listening on port 3000!');
 });
