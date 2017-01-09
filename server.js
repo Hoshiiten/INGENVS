@@ -36,7 +36,7 @@ db.query(cypher, {id: 1}, function(err, result) {
   }
 
   json = JSON.stringify(data);
-  fs.writeFile('diseaseData.json', json, 'utf8');
+  fs.writeFile('public/interface/diseaseData.json', json, 'utf8');
 
 });
 
