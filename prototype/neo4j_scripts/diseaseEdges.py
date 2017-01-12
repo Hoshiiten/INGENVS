@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import py2neo as pn
+import py2neo as gp
 from py2neo.ogm import *
 
 gp.authenticate("localhost:7474","neo4j","felix")
@@ -37,7 +37,7 @@ for disId in relationdict:
     for relative in relationdict[disId]:
         relnode = graph.find_one('Disease','omimId',relative)
         if len(list(graph.match(start_node=dis, end_node=relnode, rel_type='SIMILAR_TO', bidirectional=True))) == 0:
-            rel = pn.Relationship(dis,'SIMILAR_TO',relnode,value=relationdict[disId][relative])
+            rel = gp.Relationship(dis,'SIMILAR_TO',relnode,value=relationdict[disId][relative])
             graph.create(rel)
     tx.commit()
 
