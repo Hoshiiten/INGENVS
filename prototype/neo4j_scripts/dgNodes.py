@@ -7,17 +7,21 @@ Created on Thu Dec 22 13:49:04 2016
 
 import py2neo as gp
 from py2neo.ogm import *
+import sys
+
+id = sys.argv[1]
+password = sys.argv[2]
 
 gp.authenticate("localhost:7474","neo4j","felix")
 graph = gp.Graph()
 
-dis = open("maladies.csv")
+dis = open("./prototype/datasets/maladies.csv")
 disdict = {}
 for line in dis.readlines():
     disease = line.rstrip().rsplit(',')
     disdict[disease[0]]=[]
     
-fic = open("netIds.csv")
+fic = open("./prototype/datasets/netIds.csv")
 for line,dis in zip(fic.readlines(),disdict):
     nodes = line.rstrip().rsplit(' ')
     disdict[dis] = nodes
