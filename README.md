@@ -1,6 +1,6 @@
 # INGENVS
 
-Requis: nodejs
+Requis: nodejs, npm, neo4j, py2neo 
 
 Pour faire fonctionner le serveur, placez vous dans le dossier Ingenvs et taper les commandes suivantes:
 - npm install
