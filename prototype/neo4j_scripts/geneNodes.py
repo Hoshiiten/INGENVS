@@ -7,6 +7,10 @@ Created on Tue Dec 20 23:05:05 2016
 
 import py2neo as gp
 from py2neo.ogm import *
+import sys
+
+id = sys.argv[1]
+password = sys.argv[2]
 
 gp.authenticate("localhost:7474","neo4j","felix")
 graph = gp.Graph()
@@ -16,7 +20,7 @@ class Gene(GraphObject):
     
     entrezId = Property()
         
-fic = open("genes.csv")
+fic = open("./prototype/datasets/genes.csv")
 geneNodes = []
 for line in fic.readlines():
     geneNodes.append(line.rstrip())
