@@ -24,6 +24,8 @@ Go into Ingenvs directory and write the following command:
 
 bash run.sh idNeo4j passwordNeo4j
 
+(you can then check your graphs database neo4j at http://localhost:7474)
+
 ## Run server
 
 Go into Ingenvs directory and write the following commands:
