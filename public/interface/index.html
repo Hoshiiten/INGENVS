@@ -51,9 +51,13 @@
                     </li>
                     <br/>
                     <li class="text-center">
-                        <form name="myForm">
+			
+			    <form name="myForm"
+                              action="/graph"
+                              method="post">
+				
                             <label for="repeatSelect">  Disease: </label> <br/>
-                            <select name="repeatSelect" id="repeatSelect" ng-model="maladie.model">
+                            <select name="choice_disease" id="repeatSelect" ng-model="maladie.model">
                                 <option ng-repeat="option in maladie.availableOptions" value="{{option.name}}">{{option.name}}</option>
                             </select>
                         </form>
