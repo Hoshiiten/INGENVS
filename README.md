@@ -34,7 +34,7 @@ Go into Ingenvs directory and write the following commands:
 
 npm install
 
-nodejs server.js
+nodejs server.js idNeo4j passwordNeo4j
 
 ## See web page
 
