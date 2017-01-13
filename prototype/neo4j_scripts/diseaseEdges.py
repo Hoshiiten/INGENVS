@@ -3,10 +3,10 @@ import py2neo as gp
 from py2neo.ogm import *
 import sys
 
-id = sys.argv[1]
+ID = sys.argv[1]
 password = sys.argv[2]
 
-gp.authenticate("localhost:7474",id,password)
+gp.authenticate("localhost:7474",ID,password)
 graph = gp.Graph()
 
 def readDiseaseIds(filename):
