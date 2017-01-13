@@ -10,8 +10,8 @@ var express = require("express");   // to create web server
 var bodyParser = require("body-parser");  // to parse html
 var fs      = require("fs");        // to read/write in file
 var db = require("seraph")({
-	user: 'neo4j',
-	pass: 'felix'
+	user: process.argv[2],
+	pass: process.argv[3]
 });
 
 
