@@ -17,6 +17,8 @@ sudo apt-get install nodejs
 
 pip install py2neo
 
+- npm: sudo apt-get install npm
+
 
 ## Database filling
 
@@ -32,7 +34,7 @@ Go into Ingenvs directory and write the following commands:
 
 npm install
 
-node server.js
+nodejs server.js
 
 ## See web page
 
