@@ -15,9 +15,6 @@ var db = require("seraph")({
 });
 
 
-
-
-
 /*    SOME MODULE SETTINGS      */
 // Instanciate an object express
 var server = express(); 
@@ -31,10 +28,8 @@ var cypherDiseaseNode = "MATCH (n:Disease) RETURN n";
 db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
   if (err) throw err;
 
-  console.log(result)
-
   for(d = 0 ; d < result.length ; d++){
-    var tmp = {}; tmp["id"] = d.toString(); tmp["name"] = result[d]["name"];
+    var tmp = {}; tmp["id"] = d; tmp["name"] = result[d]["name"];
     data["nodes"].push(tmp);
   }
 
@@ -79,7 +74,7 @@ db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
   }
 
   json = JSON.stringify(data);
-  fs.appendFile('public/interface/diseaseData.json', json, 'utf8');
+  fs.writeFile('public/interface/diseaseData.json', json, 'utf8');
 
 
 });
