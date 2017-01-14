@@ -1,0 +1,11 @@
+Afficher le nom pour toutes les maladies (pour le menu déroulant "Maladies")
+MATCH (n:Disease) RETURN (n.name)
+
+Afficher le graphe de similarité des maladies
+MATCH (n:Disease) RETURN (n)
+
+Afficher un réseau de gènes pour une maladie donnée
+MATCH (n : DtoG {dis:"002", seed : True}) - [:INTERACT_WITH*1..] - (neighbors) RETURN n, collect(DISTINCT neighbors)
+
+Afficher un réseau de gènes restreint (à partir des noeuds seeds) pour une maladie donnée
+MATCH (n : DtoG {dis:"002", seed : True}) - [:INTERACT_WITH*1..2] - (neighbors) RETURN n, collect(DISTINCT neighbors)
