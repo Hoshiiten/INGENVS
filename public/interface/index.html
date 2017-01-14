@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ingenvs</title>
-	<!-- BOOTSTRAP STYLES-->
+  <!-- BOOTSTRAP STYLES-->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
      <!-- FONTAWESOME STYLES-->
     <link href="assets/css/font-awesome.css" rel="stylesheet" />
@@ -16,6 +16,10 @@
     <link href="assets/css/custom.css" rel="stylesheet" />
      <!-- GOOGLE FONTS-->
    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- VISU -->
+   <link rel="stylesheet" href="visu.css"/>
+
+
    <script src="https://code.angularjs.org/snapshot/angular.min.js"></script>
    <script src="assets/js/app.js"></script>
    
@@ -34,11 +38,11 @@
                 <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
-				<li class="text-center">
+        <li class="text-center">
                     <img src="assets/img/header3.jpg" class="user-image img-responsive"/>
-					</li>
-				
-					
+          </li>
+        
+          
                     <li>
                         <div class="input-group custom-search-form">
                             <input type="text" class="form-control" placeholder="Search...">
@@ -51,11 +55,11 @@
                     </li>
                     <br/>
                     <li class="text-center">
-			
-			    <form name="myForm"
+      
+          <form name="myForm"
                               action="/graph"
                               method="post">
-				
+        
                             <label for="repeatSelect">  Disease: </label> <br/>
                             <select name="choice_disease" id="repeatSelect" ng-model="maladie.model">
                                 <option ng-repeat="option in maladie.availableOptions" value="{{option.name}}">{{option.name}}</option>
@@ -99,130 +103,20 @@
                             Selected network
                         </div>
                         <div class="panel-body">
-				
-				                        
-				<!--  GRAPH START  -->
-				
-				
-                            <style>
-
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
-
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-.node text {
-  pointer-events: none;
-  font: 10px sans-serif;
-}
-
-</style>
-<svg width="960" height="500"></svg>
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
+        
+                                
+        <!--  GRAPH START  -->
+        
+        
+    <svg width="960" height="600"></svg>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="visu.js"></script>
 
 
-
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
-
-var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
-
-d3.json("miserables.json", function(error, graph) {
-  if (error) throw error;
-
-  var link = svg.append("g")
-      .attr("class", "links")
-    .selectAll("line")
-    .data(graph.links)
-    .enter().append("line")
-      .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
-
-  var node = svg.selectAll(".node")
-    .data(graph.nodes)
-    .enter().append("circle")
-    .attr("class", "node")
-    .attr("r", 5)
-    .attr("fill", function(d) { return color(d.group); })
-    .on("click",function(d) {
-    })
-
-    .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
-
-  node.append("text")
-      .attr("dx", 12)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.id });
-  
-
-  simulation
-      .nodes(graph.nodes)
-      .on("tick", ticked);
-
-  simulation.force("link")
-      .links(graph.links);
-
-  
-function disp() {
-    node.on("click", function(d) {
-    alert(d.name)
-})
-
-};
-
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  }
-});
-
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
-
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
-
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
-
-
-</script>
-				
-				
-				<!-- GRAPH END  -->
+        <!-- GRAPH END  -->
 
                    
-		
+    
                         </div>
                     </div>            
                 </div>
