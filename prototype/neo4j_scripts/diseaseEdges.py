@@ -3,10 +3,10 @@ import py2neo as gp
 from py2neo.ogm import *
 import sys
 
-ID = sys.argv[1]
-password = sys.argv[2]
+#ID = sys.argv[1]
+#password = sys.argv[2]
 
-gp.authenticate("localhost:7474",ID,password)
+gp.authenticate("localhost:7474",'neo4j','felix')
 graph = gp.Graph()
 
 def readDiseaseIds(filename):
@@ -32,8 +32,8 @@ def readAdjacencyMatrix(filename,indexlist,dico):
             
     return dico
 
-relationdict, diseaseIndex = readDiseaseIds("./prototype/datasets/maladies.csv")
-relationdict = readAdjacencyMatrix("./prototype/datasets/maladiesSim.csv",diseaseIndex,relationdict)
+relationdict, diseaseIndex = readDiseaseIds("../datasets/maladies.csv")
+relationdict = readAdjacencyMatrix("../datasets/maladiesSim.csv",diseaseIndex,relationdict)
 
 for disId in relationdict:    
     tx = graph.begin()

@@ -9,34 +9,34 @@ import py2neo as gp
 from py2neo.ogm import *
 import sys
 
-ID = sys.argv[1]
-password = sys.argv[2]
+#ID = sys.argv[1]
+#password = sys.argv[2]
 
-gp.authenticate("localhost:7474",ID,password)
+gp.authenticate("localhost:7474",'neo4j','felix')
 graph = gp.Graph()
 
-dis = open("./prototype/datasets/maladies.csv")
+dis = open("../datasets/maladies.csv")
 disdict = {}
 for line in dis.readlines():
     disease = line.rstrip().rsplit(',')
     disdict[disease[0]]=[]
     
-fic = open("./prototype/datasets/netIds.csv")
+fic = open("../datasets/netIds.csv")
 for line,dis in zip(fic.readlines(),disdict):
     nodes = line.rstrip().rsplit(' ')
     disdict[dis] = nodes
     
 
 
-for disease in disdict.keys():
-    for gene in disdict[disease]:
+for dis in disdict.keys():
+    for gen in disdict[dis]:
         tx = graph.begin()
-        dg = gp.Node("DtoG",dis = disease, gen = gene)
+        dg = gp.Node("DG",disease = dis, gene = gen)
         graph.create(dg)
-        m = graph.find_one('Disease','omimId',disease)
-        g = graph.find_one('Gene','entrezId',gene)
-        m_dg = gp.Relationship(m,'LINKED',dg)
-        g_dg = gp.Relationship(dg,'LINKED',g)
+        m = graph.find_one('Disease','omimId',dis)
+        g = graph.find_one('Gene','entrezId',gen)
+        m_dg = gp.Relationship(m,'M_TO_DG',dg)
+        g_dg = gp.Relationship(dg,'DG_TO_G',g)
         graph.create(m_dg)
         graph.create(g_dg)
         tx.commit()

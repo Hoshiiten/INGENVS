@@ -3,10 +3,10 @@ import py2neo as gp
 from py2neo.ogm import *
 import sys
 
-ID = sys.argv[1]
-password = sys.argv[2]
+#ID = sys.argv[1]
+#password = sys.argv[2]
 
-gp.authenticate("localhost:7474",ID,password)
+gp.authenticate("localhost:7474",'neo4j','felix')
 graph = gp.Graph()
 
 class Disease(GraphObject):
@@ -16,7 +16,7 @@ class Disease(GraphObject):
     name = Property()    
     tissu = Property() 
     
-fic = open("./prototype/datasets/maladies.csv")
+fic = open("../datasets/maladies.csv")
 diseaseNodes = {}
 for line in fic.readlines():
     disease = line.rstrip().rsplit(',')

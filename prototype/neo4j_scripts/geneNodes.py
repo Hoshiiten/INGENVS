@@ -9,10 +9,10 @@ import py2neo as gp
 from py2neo.ogm import *
 import sys
 
-ID = sys.argv[1]
-password = sys.argv[2]
+#ID = sys.argv[1]
+#password = sys.argv[2]
 
-gp.authenticate("localhost:7474",ID,password)
+gp.authenticate("localhost:7474",'neo4j','felix')
 graph = gp.Graph()
 
 class Gene(GraphObject):
@@ -20,7 +20,7 @@ class Gene(GraphObject):
     
     entrezId = Property()
         
-fic = open("./prototype/datasets/genes.csv")
+fic = open("../datasets/genes.csv")
 geneNodes = []
 for line in fic.readlines():
     geneNodes.append(line.rstrip())
