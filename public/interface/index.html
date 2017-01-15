@@ -57,14 +57,17 @@
                     <li class="text-center">
       
           <form name="myForm"
-                              action="/graph"
+                              action="/interface"
                               method="post">
         
-                            <label for="repeatSelect">  Disease: </label> <br/>
-                            <select name="choice_disease" id="repeatSelect" ng-model="maladie.model">
-                                <option ng-repeat="option in maladie.availableOptions" value="{{option.name}}">{{option.name}}</option>
+                            <label>  Disease: </label> <br/>
+                            <select name="choice_disease" id="choice_disease" ng-model="disease">
+                                <option ng-repeat="node in diseaseData.allDiseases" value="{{node.name}}">{{node.name}}</option>
                             </select>
                         </form>
+
+                        <button ng-click="showGraph()">Show Graph</button>
+
                     </li>
                     <li >
 
@@ -75,6 +78,7 @@
                             </select>
 
                         </form>
+
                     </li>
                     <li>
                         <form action="action_page.php" method="get">
@@ -124,7 +128,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Description: <br/>
-                            {{maladie.model}}<br/>
+                            Disease name: {{disease}}, Associated Tissue: {{tissu}}, Omim ID: {{omimId}} <br/>
                             {{gene.model}}
                      </div>
    
