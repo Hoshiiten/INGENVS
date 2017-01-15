@@ -15,23 +15,27 @@ import sys
 gp.authenticate("localhost:7474",'neo4j','felix')
 graph = gp.Graph()
 
-dis = open("../datasets/maladies.csv")
+dis = open("../datasets/seeds.csv")
 disdict = {}
 for line in dis.readlines():
-    disease = line.rstrip().rsplit(',')
-    disdict[disease[0]]=[]
+    disease = line.rstrip().rsplit('\t')
+    disdict[disease[0]]={}
+    disdict[disease[0]]["allgenes"]=[]
+    disdict[disease[0]]["seeds"]=disease[1:]
     
 fic = open("../datasets/netIds.csv")
 for line,dis in zip(fic.readlines(),disdict):
     nodes = line.rstrip().rsplit(' ')
-    disdict[dis] = nodes
+    disdict[dis]["allgenes"] = nodes
     
 
-
 for dis in disdict.keys():
-    for gen in disdict[dis]:
+    for gen in disdict[dis]["allgenes"]:
         tx = graph.begin()
-        dg = gp.Node("DG",disease = dis, gene = gen)
+        if gen in disdict[dis]["seeds"]:
+            dg = gp.Node("DG",disease = dis, gene = gen, seed = True)
+        else:
+            dg = gp.Node("DG",disease = dis, gene = gen)
         graph.create(dg)
         m = graph.find_one('Disease','omimId',dis)
         g = graph.find_one('Gene','entrezId',gen)

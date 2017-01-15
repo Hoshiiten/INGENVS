@@ -5,11 +5,11 @@ Requête : Afficher le graphe de similarité des maladies
 MATCH (n:Disease) RETURN (n)
 
 Requête : Afficher un réseau de gènes pour une maladie X
-MATCH (n : DG {dis:"X", seed : True}) - [:INTERACT_WITH*1..] - (neighbors) RETURN n, collect(DISTINCT neighbors)
+MATCH (n:DG {dis:"X", seed:True})-[:INTERACT_WITH*1..]-(neighbors) RETURN n, collect(DISTINCT neighbors)
 
 Requête : Afficher un réseau de gènes restreint (à partir des noeuds seeds) pour une maladie X
-MATCH (n : DG {dis:"X", seed : True}) - [:INTERACT_WITH*1..2] - (neighbors) RETURN n, collect(DISTINCT neighbors)
+MATCH (n:DG {dis:"X", seed:True})-[:INTERACT_WITH*1..2]-(neighbors) RETURN n, collect(DISTINCT neighbors)
 
 Requête : Dans quelles maladies est impliqué le gène A ? 
-MATCH (n : Gene {entrezID :"A") - [*2] - (v:Disease) RETURN v.name 
+MATCH (n:Gene {entrezID:"A")-[*2]-(v:Disease) RETURN v.name 
 
