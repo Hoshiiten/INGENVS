@@ -4,6 +4,9 @@ var app = angular.module("diseaseGraph", []);
 
 app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
+    $scope.inserted = false;
+
+
     $http.get("graphData.json").then(function(response) {
       $scope.diseaseData = {
         model: null,
@@ -15,18 +18,17 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
     $scope.showGraph = function () {
 
+      $scope.inserted = true;
+
       $http.get("data.json").then(function(response) {
         var diseaseName = $scope.disease;
         $scope.tissu = response.data.disease[diseaseName].tissu;
         $scope.omimId = response.data.disease[diseaseName].omimId;
         $scope.id = response.data.disease[diseaseName].id;
+        $scope.name = diseaseName;
       });
 
     }
-
-
-
-
 
 
 

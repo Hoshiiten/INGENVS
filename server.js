@@ -105,9 +105,6 @@ server.post('/interface', function(req, res, next){
 */
 
 
-
-
-
   res.redirect("/interface");
 });
 

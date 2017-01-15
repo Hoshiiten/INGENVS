@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -55,18 +55,22 @@
                     </li>
                     <br/>
                     <li class="text-center">
-      
+      <!--
           <form name="myForm"
                               action="/interface"
                               method="post">
+      -->
         
                             <label>  Disease: </label> <br/>
                             <select name="choice_disease" id="choice_disease" ng-model="disease">
                                 <option ng-repeat="node in diseaseData.allDiseases" value="{{node.name}}">{{node.name}}</option>
                             </select>
+      <!--
                         </form>
+      -->
 
-                        <button ng-click="showGraph()">Show Graph</button>
+
+                        <button ng-click="showGraph()" ng-model="inserted">Show Graph</button>
 
                     </li>
                     <li >
@@ -112,7 +116,7 @@
         <!--  GRAPH START  -->
         
         
-    <svg width="960" height="600"></svg>
+    <svg width="600" height="300"></svg>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="visu.js"></script>
 
@@ -126,9 +130,9 @@
                 </div>
                       <div class="col-md-12 col-sm-12 col-xs-12">                     
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" ng-show="inserted">
                             Description: <br/>
-                            Disease name: {{disease}}, Associated Tissue: {{tissu}}, Omim ID: {{omimId}} <br/>
+                            Disease name: {{name}}, Associated Tissue: {{tissu}}, Omim ID: {{omimId}} <br/>
                             {{gene.model}}
                      </div>
    
