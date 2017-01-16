@@ -6,13 +6,11 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
     $scope.inserted = false;
 
-
     $http.get("graphData.json").then(function(response) {
       $scope.diseaseData = {
         model: null,
         allDiseases: response.data.nodes
         };
-
     });
 
 
@@ -20,46 +18,55 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
       $scope.inserted = true;
 
-      $http.get("data.json").then(function(response) {
-        var diseaseName = $scope.disease;
-        $scope.tissu = response.data.disease[diseaseName].tissu;
-        $scope.omimId = response.data.disease[diseaseName].omimId;
-        $scope.id = response.data.disease[diseaseName].id;
-        $scope.name = diseaseName;
+      $http.get("data.json")
+        .then(function(response) {
+
+          var diseaseName = $scope.disease;
+
+          $scope.tissu = response.data.disease[diseaseName].tissu;
+          $scope.omimId = response.data.disease[diseaseName].omimId;
+          $scope.id = response.data.disease[diseaseName].id;
+          $scope.name = diseaseName;
+
+
+      }).then(function(response){
+
+        var data = { diseaseId : $scope.omimId }
+
+        $http.post('/interface', data);
+
+
+
+
+      }).then(function(response){
+
+        $http.get("graphData.json").then(function(response) {
+        $scope.diseaseData = {
+        model: null,
+        allDiseases: response.data.nodes
+        };
+        
+        });
+
+        $scope.reloadPage = function(){window.location.reload();}
+        $scope.reloadPage();
+
       });
 
+    $scope.$watch('diseaseData', function() {
+
+    });
+
     }
-
-
 
  }]);
 
 
-/*
-    $scope.sendDisease = function () {
-            var choosenDisease = $scope.disease;
+ 
 
-            var config = {
-                headers : {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-                }
-            }
 
-            $http.post('/interface', choosenDisease, config)
-            .success(function (data, status, headers, config) {
-                $scope.PostDataResponse = data;
-            })
-            .error(function (data, status, header, config) {
-                $scope.ResponseDetails = "Data: " + data +
-                    "<hr />status: " + status +
-                    "<hr />headers: " + header +
-                    "<hr />config: " + config;
-            });
 
-    
-
-    };
-    
+/*   
     
     $scope.gene = {
      model: null,

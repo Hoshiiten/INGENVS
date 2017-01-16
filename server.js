@@ -19,7 +19,8 @@ var db = require("seraph")({
 // Instanciate an object express
 var server = express(); 
 // Use parsing module
-server.use(bodyParser.urlencoded({ extended: false }));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 
 
 
@@ -33,8 +34,6 @@ var cypherDiseaseNode = "MATCH (n:Disease) RETURN n";
 db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
   if (err) throw err;
 
-  console.log(result)
-
   for(d = 0 ; d < result.length ; d++){
     var tmp = {}; tmp["id"] = result[d]["id"]; tmp["name"] = result[d]["name"];
     graphData["nodes"].push(tmp);
@@ -43,18 +42,12 @@ db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
     data["disease"][result[d]["name"]] = tmp2;
   }
 
-  json = JSON.stringify(graphData);
-  fs.writeFile('public/interface/graphData.json', json, 'utf8');
-
   json2 = JSON.stringify(data);
   fs.writeFile('public/interface/data.json', json2, 'utf8');
 
-});
 
-
-
-var cypherDiseaseLink = "MATCH ()-[r:SIMILAR_TO]->() RETURN r";
-db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
+  var cypherDiseaseLink = "MATCH ()-[r:SIMILAR_TO]->() RETURN r";
+  db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
   if (err) throw err;
 
   for(d = 0 ; d < result.length ; d++){
@@ -64,9 +57,15 @@ db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
 
   json = JSON.stringify(graphData);
   fs.writeFile('public/interface/graphData.json', json, 'utf8');
+  
 
+  });
 
 });
+
+
+
+
   
 
 
@@ -75,37 +74,42 @@ db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
 server.use('/', express.static(__dirname + "/public/home/"));
 server.use('/interface', express.static(__dirname + "/public/interface"));
 server.post('/interface', function(req, res, next){
-  var disease = req.body.choice_disease;
-  console.log(disease);
+    var disease = req.body.diseaseId;
+    var cypherDiseaseNode = "MATCH (n:DG {disease:'"+disease+"', seed:True})-[:INTERACT_WITH*1..]-(neighbors) RETURN n, collect(DISTINCT neighbors) AS p";
 
-/*
-  graphData = {"nodes":[{"id":0,"name":"maladie2"},{"id":1,"name":"maladie1"},{"id":2,"name":"maladie3d"}],"links":[{"source":0,"target":1,"value":1}]}
-  json = JSON.stringify(graphData);
-  fs.writeFile('public/interface/diseaseData.json', json, 'utf8');
+    var graphData = {"nodes" : [] , "links" : [] };
 
+    db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
+      if (err) throw err;
 
+      var seed = result[0]["n"];
+      var neigh = result[0]["p"];
 
-  var cypherDiseaseGraph = "MATCH (n : DG {dis:'002', seed : True}) - [:INTERACT_WITH*1..] - (neighbors) RETURN n, collect(DISTINCT neighbors)";
-  db.query(cypherDiseaseGraph, {id: 1}, function(err, result) {
-    if (err) throw err;
+      graphData["nodes"].push( { "id" : seed["id"] , "name" : seed["gene"] } );
 
-    console.log(result);
+      for(d = 0 ; d < result[0]["p"].length ; d++){
+        var tmp = {}; tmp["id"] = neigh[d]["id"]; tmp["name"] = neigh[d]["gene"];
+        graphData["nodes"].push(tmp);
+      }
 
-    for(d = 0 ; d < result.length ; d++){
-      var tmp = {}; tmp["source"] = result[d]["start"]; tmp["target"] = result[d]["end"]; tmp["value"] = 1;
-      graphData["links"].push(tmp);
-    }
+    var cypherDiseaseLink = "MATCH (:DG {disease:'"+disease+"', seed:True})-[r:INTERACT_WITH*1..]-(neighbors) RETURN r";
+    db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
+      if (err) throw err;
 
-    json = JSON.stringify(graphData);
-    fs.writeFile('public/interface/diseaseData.json', json, 'utf8');
+      for(d = 0 ; d < result.length ; d++){
+        var tmp = {}; tmp["source"] = result[d][0]["start"]; tmp["target"] = result[d][0]["end"]; tmp["value"] = 1 /*result[d]["properties"]*/;
+        graphData["links"].push(tmp);
+      }
 
+      json = JSON.stringify(graphData);
+      fs.writeFile('public/interface/graphData.json', json, 'utf8');
 
-  });
+    });
 
-*/
+});
 
+res.redirect("/interface");
 
-  res.redirect("/interface");
 });
 
 
