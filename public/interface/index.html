@@ -20,12 +20,13 @@
    <link rel="stylesheet" href="visu.css"/>
 
 
+   <script src="jquery-3.1.1.min.js"></script>
    <script src="https://code.angularjs.org/snapshot/angular.min.js"></script>
    <script src="assets/js/app.js"></script>
    
 </head>
-<body>
-    <table ng-app="diseaseGraph" ng-controller="graph">
+<body ng-app="diseaseGraph">
+    <table ng-controller="graph">
     <td width="20%" >
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
@@ -114,12 +115,13 @@
         
                                 
         <!--  GRAPH START  -->
-        
-        
+
     <svg width="600" height="300"></svg>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="visu.js"></script>
-
+      
+    <div id="graph">
+    <script src="visu.js"></script>        
+    </div>
 
         <!-- GRAPH END  -->
 

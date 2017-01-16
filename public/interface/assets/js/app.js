@@ -6,10 +6,19 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
     $scope.inserted = false;
 
-    $http.get("graphData.json").then(function(response) {
+    var diseaseList = [];
+
+    $http.get("data.json").then(function(response) {
+      var disease = response.data.disease;
+      diseaseKeys = Object.keys(disease);
+
+      for(i = 0 ; i < diseaseKeys.length ; i++) {
+        diseaseList.push( { "name" : diseaseKeys[i] , "id" : diseaseKeys[i]["id"] } )
+      }
+
       $scope.diseaseData = {
         model: null,
-        allDiseases: response.data.nodes
+        allDiseases: diseaseList
         };
     });
 
@@ -48,6 +57,8 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
         
         });
 
+        //$("#page-wrapper").load(location.href+#page-wrapper>*,);
+        //$("#graph").load(location.href+" #page-wrapper>*,");
         $scope.reloadPage = function(){window.location.reload();}
         $scope.reloadPage();
 
