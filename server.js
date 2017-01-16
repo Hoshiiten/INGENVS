@@ -96,8 +96,8 @@ server.post('/interface', function(req, res, next){
     db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
       if (err) throw err;
 
-      for(d = 0 ; d < result.length ; d++){
-        var tmp = {}; tmp["source"] = result[d][0]["start"]; tmp["target"] = result[d][0]["end"]; tmp["value"] = 1 /*result[d]["properties"]*/;
+      for(d = 0 ; d < result[1].length ; d++){
+        var tmp = {}; tmp["source"] = result[1][d]["start"]; tmp["target"] = result[1][d]["end"]; tmp["value"] = 1 /*result[d]["properties"]*/;
         graphData["links"].push(tmp);
       }
 
@@ -114,7 +114,7 @@ res.redirect("/interface");
 
 
 
-// Create server
+/*    CREATE SERVER      */
 server.listen(3000, function () {
   console.log('listening on port 3000!');
 });
