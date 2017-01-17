@@ -6,20 +6,27 @@ var app = angular.module("diseaseGraph", []);
 // Controller Definition
 app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
-
     // This variable is used to hide or show description div
-    $scope.inserted = false;
+    $scope.diseaseInserted = false
 
     // This list will contain diseases present in the diseases network
     var diseaseList = [];
+    var geneList = [];
 
-    // Here we parse the data.json file to fill out diseaseList 
+    // Here we parse the data.json file to fill out diseaseList and geneList
     $http.get("data.json").then(function(response) {
+
+
       var disease = response.data.disease;
       diseaseKeys = Object.keys(disease);
-
       for(i = 0 ; i < diseaseKeys.length ; i++) {
         diseaseList.push( { "name" : diseaseKeys[i] , "id" : diseaseKeys[i]["id"] } )
+      }
+
+      var gene = response.data.genes;
+      geneKeys = Object.keys(gene);
+      for(i = 0 ; i < geneKeys.length ; i++) {
+        geneList.push( { "name" : geneKeys[i] , "id" : geneKeys[i]["entrezId"] } )
       }
 
       // This scope contains the diseaseList to show to the user in the select html balise
@@ -27,7 +34,14 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
         model: null,
         allDiseases: diseaseList
         };
+
+      $scope.geneData = {
+        model: null,
+        allGenes: geneList
+        };
     });
+
+
 
 
     // Here we define a new function called when user choose a disease newtwork to show
@@ -57,21 +71,12 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
         // Send request to the server
         $http.post('/interface', data);
 
-        // Reload the whole page...
-        //$scope.reloadPage = function(){window.location.reload();}
-        //$scope.reloadPage();
-
-        //$("#page-wrapper").load(location.href+#page-wrapper>*,);
+        // Reload the graph
         $("#graph").load(location.href+" #graph", function(){
             $.getScript("visu.js"); 
         });
 
-        //$("#graph").load("<script src='visu.js'></script>");
-
       });
-
-
-
 
     }
 

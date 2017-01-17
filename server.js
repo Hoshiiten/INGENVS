@@ -26,14 +26,15 @@ server.use(bodyParser.urlencoded({ extended: true }));
 
 /*  READ DATABASE   */
 var graphData = {"nodes" : [] , "links" : [] };
-var data = { "disease" : {} };
+var data = { "disease" : {} , "genes" : {} };
 
+// Here we send a request to the database to return all the disease nodes and relation
+// First request is for getting nodes
 var cypherDiseaseNode = "MATCH (n:Disease) RETURN n";
-//var cypherDiseaseNode = "MATCH (n:DG {disease:'002', seed:True})-[:INTERACT_WITH*1..]-(neighbors) RETURN n, collect(DISTINCT neighbors)"
-
 db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
   if (err) throw err;
 
+  // We build the json files that will contain the needed information for the view
   for(d = 0 ; d < result.length ; d++){
     var tmp = {}; tmp["id"] = result[d]["id"]; tmp["name"] = result[d]["name"];
     graphData["nodes"].push(tmp);
@@ -42,22 +43,35 @@ db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
     data["disease"][result[d]["name"]] = tmp2;
   }
 
-  json2 = JSON.stringify(data);
-  fs.writeFile('public/interface/data.json', json2, 'utf8');
+  var cypherGeneNode = "MATCH (n:Gene) RETURN n";
+  db.query(cypherGeneNode, {id: 1}, function(err, result) {
+    console.log(result)
 
+    for(d = 0 ; d < result.length ; d++){
+      var tmp = {}; tmp["entrezId"] = result[d]["entrezId"];
+      data["genes"][result[d]["id"]] = tmp;
+    }
 
-  var cypherDiseaseLink = "MATCH ()-[r:SIMILAR_TO]->() RETURN r";
-  db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
-  if (err) throw err;
+    // We write the information on a json file
+    json2 = JSON.stringify(data);
+    fs.writeFile('public/interface/data.json', json2, 'utf8');
 
-  for(d = 0 ; d < result.length ; d++){
-    var tmp = {}; tmp["source"] = result[d]["start"]; tmp["target"] = result[d]["end"]; tmp["value"] = 1 /*result[d]["properties"]*/;
-    graphData["links"].push(tmp);
-  }
+    // Another request for getting relation between nodes
+    var cypherDiseaseLink = "MATCH ()-[r:SIMILAR_TO]->() RETURN r";
+    db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
+    if (err) throw err;
 
-  json = JSON.stringify(graphData);
-  fs.writeFile('public/interface/graphData.json', json, 'utf8');
-  
+    // Build the json format
+    for(d = 0 ; d < result.length ; d++){
+      var tmp = {}; tmp["source"] = result[d]["start"]; tmp["target"] = result[d]["end"]; tmp["value"] = 1 /*result[d]["properties"]*/;
+      graphData["links"].push(tmp);
+    }
+
+    // Write the json file
+    json = JSON.stringify(graphData);
+    fs.writeFile('public/interface/graphData.json', json, 'utf8');
+    
+    });
 
   });
 
@@ -73,6 +87,8 @@ db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
 /*    ROUTAGE      */
 server.use('/', express.static(__dirname + "/public/home/"));
 server.use('/interface', express.static(__dirname + "/public/interface"));
+// When a disease is selected, server will execute this function, that is rebuilding the json file 
+// that will contain the element for used for the new graph
 server.post('/interface', function(req, res, next){
     var disease = req.body.diseaseId;
     var cypherDiseaseNode = "MATCH (n:DG {disease:'"+disease+"', seed:True})-[:INTERACT_WITH*1..]-(neighbors) RETURN n, collect(DISTINCT neighbors) AS p";

@@ -71,20 +71,11 @@
       -->
 
 
-                        <button ng-click="showGraph()" ng-model="inserted">Show Graph</button>
+                        <button ng-click="showGraph()" ng-model="diseaseInserted">Show Graph</button>
 
                     </li>
-                    <li >
 
-                        <form name="myForm" class="text-center">
-                            <label for="repeatSelect" > interest gene: </label><br/>
-                            <select name="repeatSelect" id="repeatSelect" ng-model="gene.model">
-                                <option ng-repeat="option in gene.availableOptions" value="{{option.name}}">{{option.name}}</option>
-                            </select>
 
-                        </form>
-
-                    </li>
                     <li>
                         <form action="action_page.php" method="get">
                             Profundity:
@@ -92,6 +83,21 @@
                          
                         </form>
                     </li>
+
+
+                    <li class="text-center">
+
+                            <label> Interest gene: </label><br/>
+                            <select name="choice_gene" id="choice_gene" ng-model="gene">
+                                <option ng-repeat="node in geneData.allGenes" value="{{node.name}}">{{node.name}}</option>
+                            </select>
+
+                          <button ng-click="function()" ng-model="geneInserted">Show Related Diseases</button>
+
+
+
+                    </li>
+
                             
                             
                 </ul>
@@ -134,10 +140,10 @@
                 </div>
                       <div class="col-md-12 col-sm-12 col-xs-12">                     
                     <div class="panel panel-default">
-                        <div class="panel-heading" ng-show="inserted">
+                        <div class="panel-heading" ng-show="DiseaseInserted">
                             Description: <br/>
                             Disease name: {{name}}, Associated Tissue: {{tissu}}, Omim ID: {{id}} <br/>
-                            {{gene.model}}
+                            {{gene}}
                      </div>
    
        
