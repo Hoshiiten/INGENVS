@@ -48,7 +48,7 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
     $scope.showGraph = function () {
 
       // This variable is used to hide or show description div
-      $scope.inserted = true;
+      $scope.diseaseInserted = true;
 
 
       // Here we parse the data.json file to get information linked to a given disease
