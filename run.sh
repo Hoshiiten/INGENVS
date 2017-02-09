@@ -1,3 +1,6 @@
+# Authors: Alexia SOUVANE
+# Date: 2017/01/15
+
 #!/bin/bash
 
 if [ -z "$1" ] || [ -z "$2" ]
