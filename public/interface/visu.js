@@ -32,16 +32,16 @@ d3.json("graphData.json", function(error, graph) {
           .on("end", dragended));
 
   node.append("title")
-      .text(function(d) { return d.id; });
+      .text(function(d) { return d.name; });
       
   var label = svg.selectAll(".nodetext")
   	.data(graph.nodes)
     .enter().append("text")
     .attr("class", "nodetext slds-text-heading--label")
     .attr("text-anchor", "middle")
-    .attr("dx", 25)
+    .attr("dx", 15)
     .attr("dy", 0)
-    .text(function (d) { return d.id; })
+    .text(function (d) { return d.name; })
 	
   simulation
       .nodes(graph.nodes)

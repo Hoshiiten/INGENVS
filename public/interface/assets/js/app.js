@@ -25,8 +25,10 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
 
       var gene = response.data.genes;
       geneKeys = Object.keys(gene);
+
+
       for(i = 0 ; i < geneKeys.length ; i++) {
-        geneList.push( { "name" : geneKeys[i] , "id" : geneKeys[i]["entrezId"] } )
+        geneList.push( { "id" : geneKeys[i] , "name" : gene[geneKeys[i]]["entrezId"] } )
       }
 
       // This scope contains the diseaseList to show to the user in the select html balise
@@ -69,7 +71,7 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
         var data = { diseaseId : $scope.omimId }
 
         // Send request to the server
-        $http.post('/interface', data);
+        $http.post('/graph', data);
 
         // Reload the graph
         $("#graph").load(location.href+" #graph", function(){
@@ -79,6 +81,28 @@ app.controller('graph', ['$scope', '$http', function($scope, $http) {
       });
 
     }
+
+
+    $scope.showRelatedDiseases = function() {
+
+      $scope.geneInserted = true;
+
+      var data = { geneId : $scope.gene }
+
+      $http.post('/diseases', data);
+
+      $http.get("diseaseData.json").then(function(response) {
+
+        $scope.diseaseForOneGene = response.data.data;
+
+      });
+
+
+
+    }
+
+
+
 
  }]);
 

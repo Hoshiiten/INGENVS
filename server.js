@@ -45,7 +45,7 @@ db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
 
   var cypherGeneNode = "MATCH (n:Gene) RETURN n";
   db.query(cypherGeneNode, {id: 1}, function(err, result) {
-    console.log(result)
+    //console.log(result)
 
     for(d = 0 ; d < result.length ; d++){
       var tmp = {}; tmp["entrezId"] = result[d]["entrezId"];
@@ -89,7 +89,7 @@ server.use('/', express.static(__dirname + "/public/home/"));
 server.use('/interface', express.static(__dirname + "/public/interface"));
 // When a disease is selected, server will execute this function, that is rebuilding the json file 
 // that will contain the element for used for the new graph
-server.post('/interface', function(req, res, next){
+server.post('/graph', function(req, res, next){
     var disease = req.body.diseaseId;
     var cypherDiseaseNode = "MATCH (n:DG {disease:'"+disease+"', seed:True})-[:INTERACT_WITH*1..]-(neighbors) RETURN n, collect(DISTINCT neighbors) AS p";
 
@@ -98,22 +98,53 @@ server.post('/interface', function(req, res, next){
     db.query(cypherDiseaseNode, {id: 1}, function(err, result) {
       if (err) throw err;
 
+
       var seed = result[0]["n"];
       var neigh = result[0]["p"];
 
-      graphData["nodes"].push( { "id" : seed["id"] , "name" : seed["gene"] } );
+
+      //for(d = 0 ; d < result[0]["n"].length ; d++){
+        graphData["nodes"].push( { "id" : seed["id"] , "name" : seed["gene"] } );
+    
+      //}
 
       for(d = 0 ; d < result[0]["p"].length ; d++){
         var tmp = {}; tmp["id"] = neigh[d]["id"]; tmp["name"] = neigh[d]["gene"];
         graphData["nodes"].push(tmp);
+        console.log(neigh[d]["id"])
+
+
+        db.relationships(neigh[d]["id"],'all', 'INTERACT_WITH', function(err, relationships){
+        
+          console.log(relationships)
+
+          for (var i = 0 ; i < relationships.length ; i++)
+          {
+            var tmp = {}; tmp["source"] = relationships[i]["start"]; tmp["target"] = relationships[i]["end"]; tmp["value"] = 1;
+            graphData["links"].push(tmp);
+
+    json = JSON.stringify(graphData);
+    fs.writeFile('public/interface/graphData.json', json, 'utf8');
+    
+          }
+
+       });
+
       }
 
+    })
+
+
+
+/*
+
     var cypherDiseaseLink = "MATCH (:DG {disease:'"+disease+"', seed:True})-[r:INTERACT_WITH*1..]-(neighbors) RETURN r";
-    db.query(cypherDiseaseLink, {id: 1}, function(err, result) {
+    db.query(cypherDiseaseLink, function(err, result) {
       if (err) throw err;
 
+
       for(d = 0 ; d < result[1].length ; d++){
-        var tmp = {}; tmp["source"] = result[1][d]["start"]; tmp["target"] = result[1][d]["end"]; tmp["value"] = 1 /*result[d]["properties"]*/;
+        var tmp = {}; tmp["source"] = result[1][d]["start"]; tmp["target"] = result[1][d]["end"]; tmp["value"] = 1;
         graphData["links"].push(tmp);
       }
 
@@ -122,11 +153,41 @@ server.post('/interface', function(req, res, next){
 
     });
 
-});
+    */
+
+
 
 res.redirect("/interface");
 
 });
+
+
+server.post('/diseases', function(req, res, next){
+    var gene = req.body.geneId;
+    diseaseData = {};
+    diseaseData["data"] = [];
+
+
+    var cypherGeneDiseases = "MATCH (n:Gene {entrezId:'"+ gene +"'}) - [*2]-(d:Disease) return d";
+
+    db.query(cypherGeneDiseases, {id: 1}, function(err, result) {
+      if (err) throw err;
+
+      for(d = 0 ; d < result.length ; d++){
+        diseaseData["data"].push( result[d]["name"] );
+      }
+
+      json = JSON.stringify(diseaseData);
+      fs.writeFile('public/interface/diseaseData.json', json, 'utf8');
+
+
+    });
+
+res.redirect("/interface");
+
+
+});
+
 
 
 

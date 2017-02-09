@@ -9,13 +9,12 @@ import py2neo as gp
 from py2neo.ogm import *
 import sys
 
-#ID = sys.argv[1]
-#password = sys.argv[2]
-
-gp.authenticate("localhost:7474",'neo4j','felix')
+ID = sys.argv[1]
+password = sys.argv[2]
+gp.authenticate("localhost:7474",ID,password)
 graph = gp.Graph()
 
-dis = open("../datasets/seeds.csv")
+dis = open("./prototype/datasets/seeds.csv")
 disdict = {}
 for line in dis.readlines():
     disease = line.rstrip().rsplit('\t')
@@ -23,10 +22,11 @@ for line in dis.readlines():
     disdict[disease[0]]["allgenes"]=[]
     disdict[disease[0]]["seeds"]=disease[1:]
     
-fic = open("../datasets/netIds.csv")
-for line,dis in zip(fic.readlines(),disdict):
+fic = open("./prototype/datasets/netIds.csv")
+for line in fic.readlines():
     nodes = line.rstrip().rsplit(' ')
-    disdict[dis]["allgenes"] = nodes
+    dis = nodes[0]
+    disdict[dis]["allgenes"] = nodes[1:]
     
 
 for dis in disdict.keys():
