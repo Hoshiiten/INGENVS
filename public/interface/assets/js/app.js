@@ -1,3 +1,8 @@
+/* 
+Authors: Alexia SOUVANE
+Date: 2017/01/15
+*/
+
 var app = angular.module("diseaseGraph", []); 
 
 'use strict';
